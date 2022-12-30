@@ -1,85 +1,66 @@
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
-  <img src="https://multiplier.com.br/assets/multiplier.svg" width="320" alt="Nest Logo" />
+<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## About Laravel
 
-# Desafio Back-end Multiplier
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-O intuito deste teste é avaliar seus conhecimentos técnicos de back-end.
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-O teste consiste em fazer um sistema para um restaurante.
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-Este desafio deve ser feito por você em sua casa. Gaste o tempo que você quiser, mas nos conte o tempo que levou para realizar o desafio.
+## Learning Laravel
 
-# Instruções de entrega do desafio
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-1. Primeiro, faça um fork deste projeto para sua conta no Github (crie uma se você não possuir).
-2. Em seguida, implemente o projeto conforme as instruções a seguir, em seu clone local.
-3. Por fim, envie via e-mail com o link do desafio, avisando quanto tempo levou para faze-lo.
+You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-# Descrição do projeto
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-Precisamos que você crie uma API REST-FULL para a utilização de restaurante, que poderá ser utilizada para mobile ou um SPA.
+## Laravel Sponsors
 
-**Sua aplicação DEVE:**
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-1. Fazer login funcionario(garçom):
-- Deve apenas visualizar seus pedidos
+### Premium Partners
 
-2. Fazer login funcionario(cozinheiro).
-- Deve visualizar todos os pedidos em andamento e há fazer
+- **[Vehikl](https://vehikl.com/)**
+- **[Tighten Co.](https://tighten.co)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Cubet Techno Labs](https://cubettech.com)**
+- **[Cyber-Duck](https://cyber-duck.co.uk)**
+- **[Many](https://www.many.co.uk)**
+- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
+- **[DevSquad](https://devsquad.com)**
+- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
+- **[OP.GG](https://op.gg)**
+- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
+- **[Lendio](https://lendio.com)**
 
-> Não precisa ter login cliente
+## Contributing
 
-3. Cadastro de Clientes (nome, CPF)
-4. Fazer o cadastro das mesas do restaurante (número da mesa).
-5. Fazer o cadastro de cardapios (cardapios com os itens do cardapio).
-6. Fazer o pedido para a mesa do cliente.
-7. Listar todos os pedidos (filtros: dia, semana, mês, por mesa, por cliente).
-8. Listar pedidos em andamento, (para o garçom).
-9. Listar pedidos há fazer e em andamento, (para o cozinheiro).
-10. Listar por cliente, maior pedido, primeiro pedido, último pedido.
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-11. População de dados:
- - Deve possuir uma base com 10K clientes
- - 50 cardapios
- - 400K pedidos
+## Code of Conduct
 
-> Dica: Utilize a biblioteca [faker](https://github.com/fakerphp/faker) para gerar os dados 😄
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-**Sua aplicação web NÃO PRECISA:**
+## Security Vulnerabilities
 
-1. Não precisa estar hospedada em nenhum servidor.
-2. Testes unitários (pontos extras se fizer)
-3. Testes integrados (pontos extras se fizer)
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-# Tecnologias que deve estar presentes no desafio
+## License
 
-- Laravel (obrigatório)
-- MySQL ou MariaDB
-- PHP
-
-**Não necessário mas se tiver será um diferencial**
-
-- Testes Unitários
-- Testes integrados
-
-# Avaliação
-
-Seu projeto será avaliado de acordo com os seguintes critérios.
-
-1. Sua aplicação preenche os requerimentos básicos?
-2. Você documentou a maneira de configurar o ambiente e rodar sua aplicação?
-3. Você seguiu as instruções de envio do desafio?
-4. Boas práticas RestFull
-5. Boas práticas Laravel
-6. Clean Code
-7. SOLID
-8. Performance consultas
-
-Adicionalmente, tentaremos verificar sua experiência com programação funcional a partir da estrutura de seu projeto.
-
----
-
-## Boa sorte!
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
