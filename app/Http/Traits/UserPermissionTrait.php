@@ -30,8 +30,6 @@ trait UserPermissionTrait{
 
         return $hasPermission;
     }
-
-
 }
 
 ?>

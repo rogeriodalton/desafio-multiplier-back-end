@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->menuSeeders(50);   //50
-        $this->userSeeders(1000); //10000
+        $this->userSeeders(10000); //10000
         $this->orderSeeders(400000); //400000
     }
 
