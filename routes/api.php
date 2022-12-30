@@ -42,7 +42,7 @@ Route::get('/', function () {
                 ['/api/user'             => 'Ususários do sistema'],
                 ['/api/order'            => 'Pedidos -> Vendas'],
                 ['/api/orderItems'       => 'PedidoItems -> VendaItems'],
-                ['/api/report' => 'Aniversário'],
+                ['/api/orderReport' => 'relatórios'],
 
         ]
     ]);

@@ -81,16 +81,16 @@ class OrderReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(string $id = null, string $iid = null, string $iiid = null)
+    public function show(string $id = null, string $iid = null)
     {
         $msgRoute = '/api/orderReport/?   (help  or  client  or  admin  or  waiter  or  cooker)';
 
         switch ($id) {
             case 'help'  : return $this->help();
-            case 'client': return $this->rptClient($iid, $iiid);
-            case 'admin' : return $this->rptAdmin($iid, $iiid);
-            case 'waiter': return $this->rptWaiter($iid, $iiid);
-            case 'cooker': return $this->rptCooker($iid, $iiid);
+            case 'client': return $this->rptClient($iid);
+            case 'admin' : return $this->rptAdmin($iid);
+            case 'waiter': return $this->rptWaiter($iid);
+            case 'cooker': return $this->rptCooker($iid);
         default:
             return $this->msgGeneric($msgRoute);
         };
@@ -289,7 +289,7 @@ class OrderReportController extends Controller
     }
 
 
-    private function rptClient(string $iid = null, string $iiid = null)
+    private function rptClient(string $iid = null)
     {
         $msgRoute = '/api/orderReport/client/?   (largeOrder  or  firstOrder  or  firstOrder)';
 
