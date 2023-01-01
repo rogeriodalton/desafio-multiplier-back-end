@@ -120,7 +120,6 @@ class DatabaseSeeder extends Seeder
         $faker = Factory::create('pt_BR');
 
         for ($i = 0; $i <= $ii; $i++) {
-
             $user = new User;
             $userGroup = new UserGroup;
             $user->name  = $faker->unique->name;

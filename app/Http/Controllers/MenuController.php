@@ -34,7 +34,7 @@ class MenuController extends Controller
         $this->userId = auth('sanctum')->user()->id;
 
         if ($this->loggedIn) {
-            $this->isAdmin  = $this->getPermission($this->loggedIn,  1); //administrador
+            $this->isAdmin  = $this->getPermission($this->loggedIn, 1); //administrador
             $this->isClient = $this->getPermission($this->loggedIn, 2); //cliente
             $this->isCooker = $this->getPermission($this->loggedIn, 3); //cozinheiro
             $this->isWaiter = $this->getPermission($this->loggedIn, 4); //garçom
@@ -170,12 +170,8 @@ class MenuController extends Controller
                     'description' => 'Descrição detalhada do cardápio',
                     'price'  => 'valor',
                 ],
-
                 '[ DELETE ]   /menu -> Excluir cardápio cadastrados' => [
-                    '{id}' => 'id do cardápio à ser alterado',
-                    'name' => 'Nome do cardápio',
-                    'description' => 'Descrição detalhada do cardápio',
-                    'price'  => 'valor',
+                    '{id}' => 'id do cardápio à ser excluído',
                 ],
             ],
         ]);

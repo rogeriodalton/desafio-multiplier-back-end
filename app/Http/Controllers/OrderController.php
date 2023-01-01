@@ -122,7 +122,6 @@ class OrderController extends Controller
             return $this->msgNotAuthorized();
 
         $rules = [
-            'board_id' => 'required|integer|exists:App\Models\Board,id',
             'order_id' => 'required|integer|exists:App\Models\BoardLog,id',
         ];
 
@@ -179,22 +178,15 @@ class OrderController extends Controller
             'help' => [
                 '[ GET ]    /order/help'   => 'Informações sobre o point solicitado.',
                 '[ GET ]    /order'        => 'Apresenta todos pedidos do sistema para usuário grupo "administrador", usuário Grupo "garçom" somente seus pedidos e usuário grupo "cozinheiro" pedidos em "preparo" ou "aguardando". ',
-                '[ POST ]   /order -> Movos usuários para o sistema' => [
-                    '{name}' => 'Nome do usuário',
-                    '{cpf}' => 'CPF do usuário',
-                    '{email}'  => 'Email do usuário utilizado para login no sistema',
-                    '{password}' => 'Senha de Usuário',
-                    '{password_confirmation}' => 'Confirmação da senha informada',
+                '[ POST ]   /order -> novos pedidos para o sistema' => [
+                    '{board_id}' => 'Número da mesa',
+                    '{waiter_id}' => 'Id do garçom',
                 ],
                 '[ PUT ]   /order -> Alterar pedidos do sistema' => [
-                    '{id}' => 'id do usuário para localizar o registro à ser alterado',
-                    'name' => 'Nome do usuário',
-                    'cpf' => 'CPF do usuário',
-                    'email'  => 'Email do usuário utilizado para login no sistema',
-                    'password' => 'Senha de Usuário',
+                    '{order_id}' => 'id do pedido para localizar o registro à ser alterado',
                 ],
                 '[ DELETE ]   /order -> Deletar pedidos à usuário' => [
-                    '{id}' => 'id do usuário para localizar o registro à ser alterado',
+                    '{order_id}' => 'id do pedido para localizar o registro à ser excluído',
                 ],
             ],
         ]);

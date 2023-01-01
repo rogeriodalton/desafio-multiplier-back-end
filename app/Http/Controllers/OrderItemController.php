@@ -273,15 +273,15 @@ class OrderItemController extends Controller
                 ],
                 '[ PUT ]   /orderItems -> Alterar usuários do sistema' => [
                     '{order_id}' => 'id do pedido',
+                    '{order_item_id}' => 'id do ítem do pedido a ser alterado',
                     'menu_id' => 'id do cardápio selecionado ',
                     'state'  => 'Estado do pedido a ser definido ["aguardando", "preparando", "pronto", "entregue"] ',
 
                 ],
                 '[ DELETE ]   /orderItems -> Excluir ítem do pedido' => [
                     '{order_id}' => 'id do pedido',
-                    '{order_item_id}' => 'item do pedido'
+                    '{order_item_id}' => 'id do item do pedido'
                 ],
-
             ],
         ]);
     }

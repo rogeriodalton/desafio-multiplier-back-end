@@ -81,7 +81,9 @@ class UserController extends Controller
         if (($this->isAdmin == false) || (($this->Request->id != $this->userId) && ($this->isAdmin == false)))
             return $this->msgNotAuthorized();
 
-        $cpfUser = User::where('cpf', $this->Request->cpf)->select('id','name')->first();
+        $cpfUser = User::where('cpf', $this->Request->cpf)
+                       ->select('id','name')
+                       ->first();
         if ($cpfUser)
             return $this->msgDuplicatedField('cpf', $cpfUser);
 
@@ -169,7 +171,7 @@ class UserController extends Controller
             'help' => [
                 '[ GET ]    /user/help'   => 'Informações sobre o point solicitado.',
                 '[ GET ]    /user'        => 'Apresenta todos usuários do sistema',
-                '[ POST ]   /user -> Movos usuários para o sistema' => [
+                '[ POST ]   /user -> Novos usuários para o sistema' => [
                     '{name}' => 'Nome do usuário',
                     '{cpf}' => 'CPF do usuário',
                     '{email}'  => 'Email do usuário utilizado para login no sistema',
