@@ -41,6 +41,7 @@ class OrderReportController extends Controller
         'board_logs.id as id',
         'board_logs.board_id',
         'board_logs.total_order',
+        'board_logs.state',
         'client.name as client',
         'waiter.name as waiter',
         'board_logs.created_at as boardLog_created_at',
@@ -101,12 +102,18 @@ class OrderReportController extends Controller
     {
         $msgRoute = '/api/orderReport/admin/?   (day-week-year  or  month-year  or  year  or  board  or  client)';
 
+        $msgRoute = response()->json([
+            'help' => [
+                '[ POST ]   /api/orderReport/admin/day-week-year'  => 'Pedidos de um dia mês e ano',
+                '[ POST ]   /api/orderReport/admin/month-year'  => 'Pedidos de um mes e ano',
+                '[ POST ]   /api/orderReport/admin/year'  => 'Pedidos de um ano',
+                '[ POST ]   /api/orderReport/admin/board'  => 'Pedidos gerados de uma mesa',
+                '[ POST ]   /api/orderReport/admin/client'  => 'Pedidos gerados de um cliente de valor maior para o menor.',
+            ],
+        ]);
+
         if (!$this->isAdmin)
             return $this->msgNotAuthorized();
-
-        if ($iid == null)
-            return $this->msgGeneric($msgRoute);
-
 
         if (!$this->Request->has('year'))
             return $this->msgNotHasField('year');
@@ -166,6 +173,7 @@ class OrderReportController extends Controller
                 }
 
                 case 'client': {
+
                     if (!$this->Request->has('board'))
                         return $this->msgNotHasField('board');
 
@@ -179,7 +187,7 @@ class OrderReportController extends Controller
                 }
 
             default:
-                return $this->msgGeneric($msgRoute);
+                return $msgRoute;
             };
 
             if (!$iid)
@@ -191,23 +199,26 @@ class OrderReportController extends Controller
                                     ->select($this->fields)
                                     ->orderBy('board_logs.id', 'desc')
                                     ->paginate(50));
-
-
-
     }
 
     private function rptWaiter(string $iid = null)
     {
-        $msgRoute = '/api/orderReport/waiter/?   (all  or  firstOrder  or  firstOrder)';
-
         if ((!$this->isWaiter) && (!$this->isAdmin))
             return $this->msgNotAuthorized();
 
-        if ($iid == null)
-            return $this->msgGeneric($msgRoute);
+        $msgRoute = response()->json([
+            'help' => [
+                '[ GET ]   /api/orderReport/waiter/all'  => 'Todos pedidos, quando logado Garçom, pedidos do garçom, caso Administrador pedidos de todos os garçons',
+                '[ GET ]   /api/orderReport/waiter/progress'  => 'Pedidos em andamento do garçom logado ou caso de login Administrador, todos os pedidos em andamento de todos os garçons',
+                '[ GET ]   /api/orderReport/waiter/closed'  => 'Pedidos encerrados do garçom logado ou caso de login Administrador, todos os pedidos encerrados de todos os garçons',
+            ],
+        ]);
 
 
         switch ($iid) {
+
+            case 'help': return $msgRoute;
+
             case 'all': if ($this->isWaiter)
                             return response()->json(
                                         $this->BoardLog->join('users as waiter', 'waiter.id', 'board_logs.waiter_id')
@@ -224,26 +235,70 @@ class OrderReportController extends Controller
                                                     ->orderBy('board_logs.id', 'desc')
                                                     ->paginate(100));
 
+            case 'progress': if ($this->isWaiter)
+                                return response()->json(
+                                        $this->BoardLog->join('users as waiter', 'waiter.id', 'board_logs.waiter_id')
+                                                       ->leftjoin('users as client', 'client.id', 'board_logs.client_id')
+                                                       ->where('waiter.id', $this->userId)
+                                                       ->where('state', 'aberto')
+                                                       ->select($this->fieldsBoardLog)
+                                                       ->orderBy('board_logs.id', 'desc')
+                                                       ->paginate(100));
+                            else
+                                return response()->json(
+                                        $this->BoardLog->join('users as waiter', 'waiter.id', 'board_logs.waiter_id')
+                                                       ->leftjoin('users as client', 'client.id', 'board_logs.client_id')
+                                                       ->where('state', 'aberto')
+                                                       ->select($this->fieldsBoardLog)
+                                                       ->orderBy('board_logs.id', 'desc')
+                                                       ->paginate(100));
+
+            case 'closed': if ($this->isWaiter)
+                                return response()->json(
+                                        $this->BoardLog->join('users as waiter', 'waiter.id', 'board_logs.waiter_id')
+                                                        ->leftjoin('users as client', 'client.id', 'board_logs.client_id')
+                                                        ->where('waiter.id', $this->userId)
+                                                        ->where('state', 'fechado')
+                                                        ->select($this->fieldsBoardLog)
+                                                        ->orderBy('board_logs.id', 'desc')
+                                                        ->paginate(100));
+                            else
+                                return response()->json(
+                                        $this->BoardLog->join('users as waiter', 'waiter.id', 'board_logs.waiter_id')
+                                                        ->leftjoin('users as client', 'client.id', 'board_logs.client_id')
+                                                        ->where('state', 'fechado')
+                                                        ->select($this->fieldsBoardLog)
+                                                        ->orderBy('board_logs.id', 'desc')
+                                                        ->paginate(100));
+
+
         default:
-            return $this->msgGeneric($msgRoute);
+            return $msgRoute;
         };
     }
 
     private function rptCooker(string $iid = null)
     {
-        $msgRoute = '/api/orderReport/cooker/?   (waiting   or   ready   or   waiting-client   or   ready-client)';
+        $msgRoute = response()->json([
+            'help' => [
+                '[ GET ]   /api/orderReport/cooker/waiting'  => 'Todos os pedidos "aguardando" e "preparando"',
+                '[ POST ]   /api/orderReport/cooker/waiting-client'  => 'Todos os pedidos, "aguardando" e "preparando" pelo client_id',
+                '[ GET ]   /api/orderReport/cooker/ready'  => 'Todos os pedidos "pronto" e "entregue"',
+                '[ POST ]   /api/orderReport/cooker/ready-client'  => 'Todos os pedidos, "pronto" e "entregue" pelo client_id',
+            ],
+        ]);
 
         if ((!$this->isCooker) && (!$this->isWaiter) && (!$this->isAdmin))
             return $this->msgNotAuthorized();
-
-        if ($iid == null)
-            return $this->msgGeneric($msgRoute);
 
         if ((($iid == 'waiting-client') || ($iid == 'ready-client')) && (!$this->Request->has('client_id')))
             return $this->msgNotHasField('client_id');
 
 
         switch ($iid) {
+
+            case 'help': return $msgRoute;
+
             case 'waiting': return response()->json($this->OrderItem->join('menus', 'menus.id','order_items.menu_id')
                                                                      ->join('board_logs', 'board_logs.id', 'order_items.board_log_id')
                                                                      ->join('users as waiter', 'waiter.id', 'board_logs.waiter_id')
@@ -284,22 +339,26 @@ class OrderReportController extends Controller
                                                                          ->orderBy('board_logs.id', 'desc')
                                                                          ->paginate(100));
         default:
-            return $this->msgGeneric($msgRoute);
+            return $msgRoute;
         };
     }
 
-
     private function rptClient(string $iid = null)
     {
-        $msgRoute = '/api/orderReport/client/?   (largeOrder  or  firstOrder  or  firstOrder)';
-
-        if ($iid == null)
-            return $this->msgGeneric($msgRoute);
+        $msgRoute = response()->json([
+            'help' => [
+                '[ GET ]   /api/orderReport/client/largeOrder'  => 'Apresenta todos pedidos de cliente ordenados do maior para o menor valor de pedido.',
+                '[ GET ]   /api/orderReport/client/firstOrder'  => 'Apresenta todos pedidos ordenados do primeiro até o último',
+                '[ GET ]   /api/orderReport/client/lastOrder'  => 'Apresenta todos pedidos de cliente ordenados do último até o primeiro.',
+            ],
+        ]);
 
         if (!$this->Request->has('client_id'))
             return $this->msgNotHasField('client_id');
 
             switch ($iid) {
+                case 'help': return $msgRoute;
+
                 case 'largeOrder': return response()->json(
                         $this->BoardLog->join('users as waiter', 'waiter.id', 'board_logs.waiter_id')
                                        ->join('users as client', 'client.id', 'board_logs.client_id')
@@ -324,7 +383,7 @@ class OrderReportController extends Controller
                                                     ->orderBy('board_logs.id', 'desc')
                                                     ->get());
                 default:
-                    return $this->msgGeneric($msgRoute);
+                    return $msgRoute;
             };
     }
 
@@ -333,11 +392,21 @@ class OrderReportController extends Controller
     {
         return response()->json([
             'help' => [
-                '[ GET ]   /orderReport/help'   => 'Informações sobre o point solicitado.',
-                '[ GET ]   /orderReport'        => 'Apresenta todos relatórios referentes à pedidos do sistema',
-                '[ GET ]   /orderReport/waiter' => 'Visualizar pedidos referente ao garçom logado',
-                '[ GET ]   /orderReport/cooker' => 'Visualizar andamento de pedidos encaminhados pra cozinha',
-                '[ GET ]   /orderReport/admin' => 'Visualizar andamento de pedidos encaminhados pra cozinha',
+                '[ GET ]   /api/orderReport/help'   => 'Informações sobre o point solicitado.',
+                '[ GET ]   /api/orderReport'        => 'Apresenta todos relatórios referentes à pedidos do sistema',
+                '[ GET ]   /api/orderReport/client/largeOrder'  => 'Apresenta todos pedidos de cliente ordenados do maior para o menor valor de pedido.',
+                '[ GET ]   /api/orderReport/client/firstOrder'  => 'Apresenta todos pedidos ordenados do primeiro até o último',
+                '[ GET ]   /api/orderReport/client/lastOrder'  => 'Apresenta todos pedidos de cliente ordenados do último até o primeiro.',
+                '[ GET ]   /api/orderReport/cooker/waiting'  => 'Todos os pedidos "aguardando" e "preparando"',
+                '[ POST ]  /api/orderReport/cooker/waiting-client'  => 'Todos os pedidos, "aguardando" e "preparando" pelo client_id',
+                '[ GET ]   /api/orderReport/cooker/ready'  => 'Todos os pedidos "pronto" e "entregue"',
+                '[ POST ]  /api/orderReport/cooker/ready-client'  => 'Todos os pedidos, "pronto" e "entregue" pelo client_id',
+                '[ GET ]   /api/orderReport/waiter/all'  => 'Todos pedidos, quando logado Garçom, pedidos do garçom, caso Administrador pedidos de todos os garçons',
+                '[ GET ]   /api/orderReport/waiter/progress'  => 'Pedidos em andamento do garçom logado ou caso de login Administrador, todos os pedidos em andamento de todos os garçons',
+                '[ GET ]   /api/orderReport/waiter/closed'  => 'Pedidos encerrados do garçom logado ou caso de login Administrador, todos os pedidos encerrados de todos os garçons',
+                '[ GET ]   /api/orderReport/waiter' => 'Visualizar pedidos referente ao garçom logado',
+                '[ GET ]   /api/orderReport/cooker' => 'Visualizar andamento de pedidos encaminhados pra cozinha',
+                '[ GET ]   /api/orderReport/admin' => 'Visualizar andamento de pedidos encaminhados pra cozinha',
             ],
         ]);
     }

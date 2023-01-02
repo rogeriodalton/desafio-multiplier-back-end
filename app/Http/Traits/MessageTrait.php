@@ -96,7 +96,7 @@ trait MessageTrait{
     public function msgNotHasField(string $fieldName = null)
     {
         return response()->json([
-            'message' => "Informe no método POST '{$fieldName}'."
+            'message' => "Informe um valor no método POST para '{$fieldName}'."
         ], 403);
     }
 

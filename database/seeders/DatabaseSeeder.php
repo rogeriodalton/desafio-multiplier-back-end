@@ -23,9 +23,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->menuSeeders(50);   //50
-        $this->userSeeders(10000); //10000
-        $this->orderSeeders(400000); //400000
+        $this->menuSeeders(50);
+        $this->userSeeders(10000);
+        $this->orderSeeders(400000);
     }
 
     private function orderSeeders(int $ii = 1)
@@ -75,11 +75,11 @@ class DatabaseSeeder extends Seeder
             $boardLog->board_id = $faker->randomElement($board);
             $boardLog->waiter_id = $faker->randomElement($waiter);
             $boardLog->client_id = $faker->randomElement($client);
-            $boardLog->state = 'fechado';
+            $boardLog->state =  $faker->randomElement(['aberto', 'fechado']);
             $boardLog->save();
 
             foreach ($boardLog as $key => $value) {
-                $ordersNum = $faker->numberBetween(1,4);
+                $ordersNum = $faker->numberBetween(1,3);
                 $menuSelected = (new Menu)->where('id', $faker->randomElement($menu))
                                           ->first();
 

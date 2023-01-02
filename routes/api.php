@@ -19,110 +19,101 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 */
 
-Route::get('/', function () {
-    return response()->json([
-        'Backend Multiplier' => [
-                [
-                    '[ POST ]  /api/login' => [
-                        '{email}' => 'email cadastrado para identificar usuário',
-                        '{password}' => 'senha do sistema.'
-                    ],
-
-                    '[ POST ]  /api/register  (usuário no grupo clientes)' => [
-                        "{name}" => "Nome do usuário",
-                        "{cpf}" => "Número de Cadastro de Pessoa física do Usuário",
-                        "email" => "Email do usuário utilizado para login no sistema",
-                        "password" => "Senha de Usuário"
-                    ],
-                ],
-                ['[ POST ]  /api/logout' => 'Encerra seção'],
-                ['[ POST ]  /api/me'     => 'Quem está logado?'],
-                ['/api'                  => 'recursos disponíveis do sistema.'],
-                ['/api/register'         => 'Cadastro de clientes'],
-                ['/api/user'             => 'Ususários do sistema'],
-                ['/api/order'            => 'Pedidos -> Vendas'],
-                ['/api/orderItems'       => 'PedidoItems -> VendaItems'],
-                ['/api/orderReport' => 'relatórios'],
-
-        ]
+define ('mainRoute',  [
+    'Backend Multiplier' =>
+    [
+        '/api' => 'recursos disponíveis do sistema.',
+            '/api/login' => 'logar no sistema (não permitido para CLIENTES)',
+            '/api/register' => '(registrar usuário no grupo clientes)',
+            '[ POST ]  /api/logout' => 'Encerra seção',
+            '[ POST ]  /api/me'     => 'Quem está logado?'],
+        '/api/user'   => 'Ususários do sistema',
+        '/api/order'  => 'Pedidos -> Vendas',
+        '/api/orderItems'   => 'PedidoItems -> VendaItems',
+        '/api/orderReport' => 'relatórios',
     ]);
+
+Route::get('/', function () {
+    return response()->json(mainRoute);
 });
 
+Route::post('/', function () {
+    return response()->json(mainRoute);
+});
 
-Route::get('login/help', [\App\Http\Controllers\Auth\Api\LoginController::class, 'loginHelp']);
-Route::get('login',      [\App\Http\Controllers\Auth\Api\LoginController::class, 'loginHelp']);
-Route::post('login',     [\App\Http\Controllers\Auth\Api\LoginController::class, 'login']);
-Route::post('logout',    [\App\Http\Controllers\Auth\Api\LoginController::class, 'logout']);
-Route::post('me',        [\App\Http\Controllers\Auth\Api\LoginController::class, 'me']);
-
-Route::get('register',       [\App\Http\Controllers\Auth\Api\LoginController::class, 'registerHelp']);
-Route::post('register',      [\App\Http\Controllers\Auth\Api\LoginController::class, 'register']);
-Route::get('register/help',  [\App\Http\Controllers\Auth\Api\LoginController::class, 'registerHelp']);
-Route::post('register/help', [\App\Http\Controllers\Auth\Api\LoginController::class, 'registerHelp']);
+$controller = '\App\Http\Controllers\Auth\Api\LoginController';
+Route::get('login/help',     [$controller, 'loginHelp']);
+Route::get('login',          [$controller, 'loginHelp']);
+Route::post('login',         [$controller, 'login']);
+Route::get('logout',         [$controller, 'logout']);
+Route::post('logout',        [$controller, 'logout']);
+Route::post('me',            [$controller, 'me']);
+Route::get('register',       [$controller, 'registerHelp']);
+Route::post('register',      [$controller, 'register']);
+Route::get('register/help',  [$controller, 'registerHelp']);
+Route::post('register/help', [$controller, 'registerHelp']);
 
 
 Route::group(['prefix' => 'orderReport','as' => 'api','middleware' => ['auth:sanctum']], function () {
-    $Controller = '\App\Http\Controllers\OrderReportController';
-    Route::get("/{id}/{iid}/{iiid}",  [$Controller,  'show']);
-    Route::post("/{id}/{iid}/{iiid}", [$Controller,  'show']);
-    Route::get("/{id}/{iid}",  [$Controller,  'show']);
-    Route::post("/{id}/{iid}", [$Controller,  'show']);
-    Route::get("/{id}",        [$Controller,  'show']);
-    Route::post("/{id}",       [$Controller,  'show']);
-    Route::get('/',            [$Controller, 'index']);
+    $controller = '\App\Http\Controllers\OrderReportController';
+    Route::get("/{id}/{iid}",  [$controller,  'show']);
+    Route::post("/{id}/{iid}", [$controller,  'show']);
+    Route::get("/{id}",        [$controller,  'show']);
+    Route::post("/{id}",       [$controller,  'show']);
+    Route::get('/',            [$controller, 'index']);
 });
 
 
 Route::group(['prefix' => 'board','as' => 'api','middleware' => ['auth:sanctum']], function () {
-    $Controller = '\App\Http\Controllers\BoardController';
-    Route::get("/{id}",  [$Controller,   'show']);
-    Route::get("/",      [$Controller,  'index']);
-    Route::post("/{id}", [$Controller,   'show']);
-    Route::post("/",     [$Controller,  'store']);
+    $controller = '\App\Http\Controllers\BoardController';
+    Route::get("/{id}",  [$controller,   'show']);
+    Route::get("/",      [$controller,  'index']);
+    Route::post("/{id}", [$controller,   'show']);
+    Route::post("/",     [$controller,  'store']);
 });
 
 Route::group(['prefix' => 'user','as' => 'api','middleware' => ['auth:sanctum']], function () {
-    $Controller = '\App\Http\Controllers\UserController';
-    Route::get("/{id}",  [$Controller,    'show']);
-    Route::get('/',      [$Controller,   'index']);
-    Route::post("/{id}", [$Controller,    'show']);
-    Route::post('/',     [$Controller,   'store']);
-    Route::put("/{id}",  [$Controller,    'show']);
-    Route::put('/',      [$Controller,  'update']);
-    Route::delete('/',   [$Controller, 'destroy']);
+    $controller = '\App\Http\Controllers\UserController';
+    Route::get("/{id}",  [$controller,    'show']);
+    Route::get('/',      [$controller,   'index']);
+    Route::post("/{id}", [$controller,    'show']);
+    Route::post('/',     [$controller,   'store']);
+    Route::put("/{id}",  [$controller,    'show']);
+    Route::put('/',      [$controller,  'update']);
+    Route::delete('/',   [$controller, 'destroy']);
 });
 
 Route::group(['prefix' => 'menu','as' => 'api','middleware' => ['auth:sanctum']], function () {
-    $Controller = '\App\Http\Controllers\MenuController';
-    Route::get("/{id}",  [$Controller,    'show']);
-    Route::get('/',      [$Controller,   'index']);
-    Route::post("/{id}", [$Controller,    'show']);
-    Route::post('/',     [$Controller,   'store']);
-    Route::delete('/',   [$Controller, 'destroy']);
+    $controller = '\App\Http\Controllers\MenuController';
+    Route::get("/{id}",  [$controller,    'show']);
+    Route::get('/',      [$controller,   'index']);
+    Route::post("/{id}", [$controller,    'show']);
+    Route::post('/',     [$controller,   'store']);
+    Route::delete('/',   [$controller, 'destroy']);
 });
 
 Route::group(['prefix' => 'order','as' => 'api','middleware' => ['auth:sanctum']], function () {
-    $Controller = '\App\Http\Controllers\OrderController';
-    Route::get('/',        [$Controller,   'index']);
-    Route::get('/{id}',    [$Controller,    'show']);
-    Route::post("/{id}",   [$Controller,    'show']);
-    Route::post('/',       [$Controller,   'store']);
-    Route::put("/{id}",    [$Controller,  'update']);
-    Route::put("/",        [$Controller,  'update']);
-    Route::delete("/{id}", [$Controller,  'update']);
-    Route::delete('/',     [$Controller, 'destroy']);
+    $controller = '\App\Http\Controllers\OrderController';
+    Route::get('/',        [$controller,   'index']);
+    Route::get('/{id}',    [$controller,    'show']);
+    Route::post("/{id}",   [$controller,    'show']);
+    Route::post('/',       [$controller,   'store']);
+    Route::put("/{id}",    [$controller,  'update']);
+    Route::put("/",        [$controller,  'update']);
+    Route::delete("/{id}", [$controller,  'update']);
+    Route::delete('/',     [$controller, 'destroy']);
 });
 
 Route::group(['prefix' => 'orderItems','as' => 'api','middleware' => ['auth:sanctum']], function () {
-    $Controller = '\App\Http\Controllers\OrderItemController';
-    Route::get('/',        [$Controller,   'index']);
-    Route::get('/{id}',    [$Controller,    'show']);
-    Route::post('/{id}',   [$Controller,    'show']);
-    Route::post('/',       [$Controller,   'store']);
-    Route::put("/{id}",    [$Controller,  'update']);
-    Route::put("/",        [$Controller,  'update']);
-    Route::delete("/{id}", [$Controller,  'update']);
-    Route::delete('/',     [$Controller, 'destroy']);
+    $controller = '\App\Http\Controllers\OrderItemController';
+    Route::get('/',        [$controller,   'index']);
+    Route::get('/{id}',    [$controller,    'show']);
+    Route::post('/{id}',   [$controller,    'show']);
+    Route::post('/',       [$controller,   'store']);
+    Route::put("/{id}",    [$controller,  'update']);
+    Route::put("/",        [$controller,  'update']);
+    Route::delete("/{id}", [$controller,  'update']);
+    Route::delete('/',     [$controller, 'destroy']);
 });
 
 Route::prefix('auth')->group(function() {
