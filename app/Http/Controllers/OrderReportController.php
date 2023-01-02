@@ -100,7 +100,8 @@ class OrderReportController extends Controller
 
     private function rptAdmin(string $iid = null)
     {
-        $msgRoute = '/api/orderReport/admin/?   (day-week-year  or  month-year  or  year  or  board  or  client)';
+        if (!$this->isAdmin)
+            return $this->msgNotAuthorized();
 
         $msgRoute = response()->json([
             'help' => [
@@ -111,9 +112,6 @@ class OrderReportController extends Controller
                 '[ POST ]   /api/orderReport/admin/client'  => 'Pedidos gerados de um cliente de valor maior para o menor.',
             ],
         ]);
-
-        if (!$this->isAdmin)
-            return $this->msgNotAuthorized();
 
         if (!$this->Request->has('year'))
             return $this->msgNotHasField('year');
